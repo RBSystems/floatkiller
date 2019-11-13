@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <title>Pi Setup</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type='text/javascript'>
+            $(document).ready(function(){
+                $.ajax({
+                        url : "http://localhost:7444/getDHCP",
+                        type : 'GET',
+                        
+                        success: function(data) {
+                            console.log("Success:" + data);
+                            $("#oldIP").html(data);
+                            $("#success").hide();
+                            $("#errormessage").hide();
+                            $("#deploy").hide();
+                        }
+                    });
+                $("#hostnameButton").click(function(){
+                    var hostname = $('#hostname').val();
+                    $.ajax({
+                        url : "http://localhost:7444/getdata/"+hostname,
+                        type : 'GET',
+                        success: function(data) {
+                            $("#hostname-form").hide();
+                            $("#success").show();
+                            $("#info").html(data);
+                        },
+                        error: function() {
+                            console.log("FAILED")
+                            $("#hostname-form").hide();
+                            $("#errormessage").show();
+                        }
+                    });
+                });
+                $('#backButton').click(function() {
+                    location.reload();
+                });
+                $('#errorButton').click(function() {
+                    location.reload();
+                });
+                $('#confirm').click(function() {
+                    $("#buttonGroup").hide();
+                    $("#deploy").show();
+                    $("#doubleCheck").html("Device Details");
+                });
+                
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <span id="hostname-form">
+                        <h1>Please enter the hostname below:</h1>
+                        <div>
+                            <h2>Current IP Address:</h2>
+                            <h3 id="oldIP"></h3>
+                        </div>
+                        <label>Host Name:</label><br />
+                        <input type="text" id="hostname" name="hostname"><br />
+                        </br>
+                        <button class="btn btn-large btn-primary" id="hostnameButton">Save</button> 
+                    </span>
+                    <span id="errormessage" style="color: red">
+                        <b>IP address was not found.</b> The following errors may have occured</br>
+                        <ul>
+                            <li>Host Name is incorrect</li>
+                            <li>Host Name is not in QIP</li>
+                            <li>QIP is not reachable</li>
+                        </ul>
+                        <button class="btn btn-large btn-danger" id="errorButton">Back</button>
+                    </span>
+                    <span id="success">
+                        <h1 id="doubleCheck">Does this look right?</h1>
+                        <span id="info"></span>
+                        <br>
+                        <div id="buttonGroup">
+                            <button class="btn btn-large btn-primary" id="confirm">Yes</button> <button  class="btn btn-large btn-danger" id="backButton">Back</button>
+                        </div>
+                    </span>
+                </div>
+                <div id="deploy" class="col-sm">
+                    <button id="deploybutton" class="btn btn-primary btn-lg" style="margin:50%">Deploy</button>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>

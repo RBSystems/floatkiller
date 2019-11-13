@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Pi Setup</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type='text/javascript'>
+            function myFunction() {
+                var x = document.getElementById("mySelect").value;
+                $.ajax({
+                    url : "http://localhost:7444/designation/"+x,
+                    type : 'GET',
+                    success: function(data) {
+                        console.log("Success");
+                    }
+                }); 
+            }
+            $(document).ready(function(){
+                               
+                $('#deploybutton').click(function() {
+                    window.location = "https://api.byu.edu/authorize?response_type=code&client_id=nkvyVWVBiqOKs_o7dLkUF2KHv2Ya&redirect_uri=http://localhost:7444&scope=openid";
+                }); 
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm">
+                    <span id="success">
+                            <h1>Device Details</h1>
+                            <label>Host Name:</label><br />
+                            <input type="text" value="" disabled><br />
+                            <label>IP Address:</label><br />
+                            <input type="text" value="" disabled><br />
+                            </br>
+                    </span>
+                </div>
+                <div id="deploy" class="col-sm">
+                    <select id="mySelect" onchange="myFunction()">
+                        <option value="prd">Production
+                        <option value="stg">Stage
+                        <option value="dev">Development
+                    </select>
+                    <br>
+                    <br>
+                    <br>
+                    <button id="deploybutton" class="btn btn-primary btn-lg" style="margin:50%">Deploy</button>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
